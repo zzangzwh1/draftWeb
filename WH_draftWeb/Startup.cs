@@ -9,6 +9,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WH_draftWeb.Services;
+using System.Text.Json;
+using WH_draftWeb.Models;
+using Microsoft.AspNetCore.Http;
 
 namespace WH_draftWeb
 {
@@ -25,6 +28,9 @@ namespace WH_draftWeb
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddRazorPages();
+            services.AddServerSideBlazor();
+            //for API
+            services.AddControllers();
             services.AddTransient<JsonFileProductService>();
         }
 
@@ -52,6 +58,15 @@ namespace WH_draftWeb
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapRazorPages();
+                endpoints.MapControllers();
+                endpoints.MapBlazorHub();
+                //Manual Way for API
+               /* endpoints.MapGet("/products",(context) =>{
+                    var products = app.ApplicationServices.GetService<JsonFileProductService>().GetProducts();
+                    var json = JsonSerializer.Serialize<IEnumerable<Product>>(products);
+                    return context.Response.WriteAsync(json);
+                    }); */
+
             });
         }
     }
